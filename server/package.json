@@ -1,0 +1,24 @@
+{
+  "name": "tvo-server-sample-app",
+  "description": "TVO server sample app",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "serve": "node --disable-warning=ExperimentalWarning --env-file=.env ./index.ts",
+    "type-check": "tsc"
+  },
+  "type": "module",
+  "keywords": ["tvo"],
+  "author": "Seyed Mohammad Hassanzadeh Amin",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.2"
+  }
+}
