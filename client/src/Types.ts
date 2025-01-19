@@ -13,7 +13,7 @@ export interface WeatherArrayType {
   icon: string;
 }
 
-// Defines the structure for full weather data 
+// Defines the structure for full weather data
 export interface WeatherAPIType {
   coord: {
     lon: string;
@@ -65,6 +65,7 @@ export interface WeatherAPIType {
 export interface SvgPropsType {
   size: number;
   fill: string;
+  tooltip?: string;
 }
 
 // Defines the structure for a language
@@ -96,7 +97,7 @@ export interface ButtonPropsType {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-// Defines the structure for a Select 
+// Defines the structure for a Select
 export interface SelectPropsType {
   id: string;
   placeHolder: string;
@@ -113,4 +114,10 @@ export interface TextInputPropsType {
   placeHolder: string;
   label: string;
   ref: React.Ref<HTMLInputElement>;
+}
+
+// Defines the structure for a Tooltip
+export interface TooltipPropsTypes {
+  id: string;
+  text: string;
 }

@@ -3,8 +3,18 @@ import TextInput from "./components/TextInput";
 import SelectInput from "./components/SelectInput";
 import i18n from "./i18n";
 import RadioButton from "./components/RadioButton";
-import { RadioButtonOptionsType, WeatherAPIType } from "./Types";
+import {
+  RadioButtonOptionsType,
+  WeatherAPIType,
+  weatherInformationType,
+} from "./Types";
 import CustomButton from "./components/CustomButton";
+import { t } from "i18next";
+import PressureIcon from "./Icons/PressureIcon";
+import HumidityIcon from "./Icons/HumidityIcon";
+import SunriseIcon from "./Icons/SunriseIcon";
+import SunsetIcon from "./Icons/SunsetIcon";
+import CustomTooltip from "./components/CustomTooltip";
 
 function App() {
   const [language, setLanguage] = useState<string>("en");
@@ -65,38 +75,228 @@ function App() {
     setLoading(false);
   };
 
+  /**
+   *  List of weather information shown in screen
+   */
+  const weatherInformation: Array<weatherInformationType> = [
+    {
+      label: (
+        <div>
+          <PressureIcon size={28} fill="#ffffff" tooltip="pressure-tooltip" />
+          <CustomTooltip id="pressure-tooltip" text="Pressure" />
+        </div>
+      ),
+      value: weather?.main?.pressure ?? "",
+      unit: "",
+    },
+    {
+      label: (
+        <div>
+          <HumidityIcon size={28} fill="#ffffff" tooltip="humidity-tooltip" />
+          <CustomTooltip id="humidity-tooltip" text="Humidity" />
+        </div>
+      ),
+      value: weather?.main?.humidity ?? "",
+      unit: "%",
+    },
+    {
+      label: (
+        <div>
+          <SunriseIcon size={28} fill="#ffffff" tooltip="sunrise-tooltip" />
+          <CustomTooltip id="sunrise-tooltip" text="Sunrise" />
+        </div>
+      ),
+      value:
+        new Date((weather?.sys?.sunrise ?? 0) * 1000).toLocaleTimeString(
+          "en-US",
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          }
+        ) ?? "",
+      unit: "",
+    },
+    {
+      label: (
+        <div>
+          <SunsetIcon size={28} fill="#ffffff" tooltip="sunset-tooltip" />
+          <CustomTooltip id="sunset-tooltip" text="Sunset" />
+        </div>
+      ),
+      value:
+        new Date((weather?.sys?.sunset ?? 0) * 1000).toLocaleTimeString(
+          "en-US",
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          }
+        ) ?? "",
+      unit: "",
+    },
+    {
+      label: t("sea_level"),
+      value: weather?.main?.sea_level ?? "",
+      unit: "",
+    },
+    {
+      label: t("ground_level"),
+      value: weather?.main?.grnd_level ?? "",
+      unit: "",
+    },
+    {
+      label: t("visibility"),
+      value: weather?.visibility ?? "",
+      unit: "",
+    },
+    {
+      label: t("wind_speed"),
+      value: weather?.wind.speed ?? "",
+      unit: "",
+    },
+    {
+      label: t("wind_degree"),
+      value: weather?.wind.deg ?? "",
+      unit: "",
+    },
+    {
+      label: t("wind_gust"),
+      value: weather?.wind.gust ?? "",
+      unit: "",
+    },
+    {
+      label: t("clouds"),
+      value: weather?.clouds.all ?? "",
+      unit: "%",
+    },
+    {
+      label: t("snow"),
+      value: weather?.snow?.["1h"] ?? "",
+      unit: "mm/h",
+    },
+    {
+      label: t("rain"),
+      value: weather?.rain?.["1h"] ?? "",
+      unit: "mm/h",
+    },
+  ];
+
   return (
     <div>
-      <form>
-        <div className="grid gap-5 mb-6">
-          <TextInput
-            label="City Name"
-            id="city_name"
-            ref={inputRef}
-            placeHolder="Enter City Name"
-          />
-          <SelectInput
-            ref={selectRef}
-            id="language"
-            label="Language"
-            value={language}
-            items={languages}
-            placeHolder="Select Language"
-            onChange={handleChangeLanguage}
-          />
-          <RadioButton
-            items={options}
-            label="unit"
-            onChange={handleChangeUnit}
-          />
-          <CustomButton
-            text="Submit"
-            ref={buttonRef}
-            label="Submit Form"
-            onClick={getWeatherData}
-          />
+      <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-6">
+        <form>
+          <div className="grid gap-5 mb-6">
+            <TextInput
+              label="City Name"
+              id="city_name"
+              ref={inputRef}
+              placeHolder="Enter City Name"
+            />
+            <SelectInput
+              ref={selectRef}
+              id="language"
+              label="Language"
+              value={language}
+              items={languages}
+              placeHolder="Select Language"
+              onChange={handleChangeLanguage}
+            />
+            <RadioButton
+              items={options}
+              label="unit"
+              onChange={handleChangeUnit}
+            />
+            <CustomButton
+              text="Submit"
+              ref={buttonRef}
+              label="Submit Form"
+              onClick={getWeatherData}
+            />
+          </div>
+        </form>
+        <div className="col-span-2">
+          <div className="bg-gray-800 rounded-xl p-8 flex flex-col md:flex-row justify-between">
+            <div>
+              <div className="flex flex-col gap-4 lg:flex-row lg:justify-between text-white mb-2">
+                <span>
+                  {weather?.name}, {weather?.sys?.country}
+                </span>
+                <p>
+                  {new Date((weather?.dt ?? 0) * 1000).toLocaleTimeString(
+                    "en-US",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                      hour12: false,
+                    }
+                  )}
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 text-white">
+                <div className="flex justify-between items-center">
+                  <p className="text-6xl">
+                    {weather?.main?.temp.toFixed(0)}°
+                    {weather?.unit === "metric" ? "C" : "F"}
+                  </p>
+                  <div className="grid gap-1">
+                    <p>
+                      Min / Max:
+                      <span className="mx-1">
+                        {weather?.main.temp_min.toFixed(0)}
+                      </span>
+                      \
+                      <span className="mx-1">
+                        {weather?.main?.temp_max.toFixed(0)}
+                      </span>
+                      °{weather?.unit === "metric" ? "C" : "F"}
+                    </p>
+                    <p>
+                      {t("feels_like")}:
+                      <span>
+                        {weather?.main?.feels_like.toFixed(0) ?? ""}°
+                        {weather?.unit === "metric" ? "C" : "F"}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 md:gap-x-4 lg:gap-x-4">
+                  {weatherInformation.map((item, index) => (
+                    <div
+                      className={`${
+                        !item.value ? "hidden" : "flex"
+                      } items-center`}
+                      key={index}
+                    >
+                      {item.label}:{item.value}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              {weather?.weather.map((item, index) => (
+                <div key={index} className="text-center">
+                  <img
+                    className="w-32"
+                    src={`https://openweathermap.org/img/wn/${item.icon}@4x.png`}
+                    alt={item.description}
+                    role="img"
+                    aria-label={item.description}
+                  />
+                  <p className="text-white">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
