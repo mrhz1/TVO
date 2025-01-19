@@ -1,9 +1,10 @@
+const APIKey = process.env.API_KEY
 /**
  * Base URL for OpenWeatherMap API requests.
  * Includes the API key as a query parameter for authentication.
  */
 export const baseUrl =
-  "https://api.openweathermap.org/data/2.5/weather?appid=fe027ff098c4c0f0426447783e3910bb";
+  `https://api.openweathermap.org/data/2.5/weather?appid=${APIKey}`;
 
 /**
  * Server error messages used in the application.

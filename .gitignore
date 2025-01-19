@@ -13,9 +13,6 @@ client/node_modules/
 server/dist/
 client/build/
 
-# Environment files
-.env
-
 # OS-specific files
 .DS_Store
 Thumbs.db
