@@ -117,6 +117,59 @@ function App() {
     setUnit(e.target.value);
   };
 
+  // Keyboard navigation function (Tab only, circular)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const { key, shiftKey } = e;
+
+    // List of focusable elements
+    const focusableElements = [
+      inputRef.current,
+      selectRef.current,
+      unitMetricRef.current,
+      unitImperialRef.current,
+      buttonRef.current,
+    ];
+
+    let currentIndex = focusableElements.findIndex(
+      (el) => el === document.activeElement
+    );
+
+    if (key === "Tab") {
+      if (shiftKey) {
+        // Shift + Tab: Go backward in the list of focusable elements
+        currentIndex =
+          (currentIndex - 1 + focusableElements.length) %
+          focusableElements.length;
+      } else {
+        // Tab: Go forward in the list of focusable elements
+        currentIndex = (currentIndex + 1) % focusableElements.length;
+      }
+    } else if (key === "Enter" || key === "Spacebar" || key === " ") {
+      console.log("clicked");
+
+      if (
+        document.activeElement === unitMetricRef.current &&
+        unitMetricRef.current
+      ) {
+        unitMetricRef.current.checked = true;
+        setUnit("metric");
+      }
+      if (
+        document.activeElement === unitImperialRef.current &&
+        unitImperialRef.current
+      ) {
+        unitImperialRef.current.checked = true;
+        setUnit("imperial");
+      }
+    } else {
+      return;
+    }
+
+    // Focus the next/previous element
+    focusableElements[currentIndex]?.focus();
+    e.preventDefault(); // Prevent the default tab behavior
+  };
+
   /**
    *  List of weather information shown in screen
    */
@@ -229,13 +282,14 @@ function App() {
   return (
     <div className="p-5">
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-6">
-        <form>
+        <form aria-labelledby="form-weather" role="form">
           <div className="grid gap-5 mb-6">
             <TextInput
               label="city_name"
               id="city_name"
               ref={inputRef}
               placeHolder="Enter City Name"
+              onKeyDown={handleKeyDown}
             />
             <SelectInput
               ref={selectRef}
@@ -245,17 +299,20 @@ function App() {
               items={languages}
               placeHolder="Select Language"
               onChange={handleChangeLanguage}
+              onKeyDown={handleKeyDown}
             />
             <RadioButton
               items={options}
               label="unit"
               onChange={handleChangeUnit}
+              onKeyDown={handleKeyDown}
             />
             <CustomButton
               text="search"
               ref={buttonRef}
               label="Submit Form"
               onClick={getWeatherData}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </form>
@@ -273,8 +330,8 @@ function App() {
               {loading ? (
                 t("loading")
               ) : (
-                <div className="bg-gray-800 rounded-xl p-8 flex flex-col md:flex-row justify-between">
-                  <div>
+                <div className="bg-[#2B2B2B] rounded-xl p-8 grid grid-cols-1 md:grid-cols-3 justify-between">
+                  <div className="col-span-2">
                     <div className="flex flex-col gap-4 lg:flex-row lg:justify-between text-white mb-2">
                       <span>
                         {weather?.name}, {weather?.sys?.country}
@@ -321,12 +378,12 @@ function App() {
                           </p>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 md:gap-x-4 lg:gap-x-4">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4 md:gap-x-4 lg:gap-x-4">
                         {weatherInformation.map((item, index) => (
                           <div
                             className={`${
                               !item.value ? "hidden" : "flex"
-                            } items-center`}
+                            } items-center font-semibold`}
                             key={index}
                           >
                             {item.label}:{item.value}
@@ -335,7 +392,7 @@ function App() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between md:justify-end">
                     {weather?.weather.map((item, index) => (
                       <div key={index} className="text-center">
                         <img

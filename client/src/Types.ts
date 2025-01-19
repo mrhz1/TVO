@@ -87,6 +87,7 @@ export interface RadioButtonPropsType {
   label: string;
   items: Array<RadioButtonOptionsType>;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onKeyDown:React.KeyboardEventHandler<HTMLInputElement>
 }
 
 // Defines the structure for a button
@@ -95,6 +96,7 @@ export interface ButtonPropsType {
   label: string;
   ref: React.Ref<HTMLButtonElement>;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onKeyDown:React.KeyboardEventHandler<HTMLButtonElement>
 }
 
 // Defines the structure for a Select
@@ -106,6 +108,7 @@ export interface SelectPropsType {
   value: string;
   items: Array<LanguagesType>;
   onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  onKeyDown:React.KeyboardEventHandler<HTMLSelectElement>
 }
 
 // Defines the structure for a Text Input
@@ -114,6 +117,7 @@ export interface TextInputPropsType {
   placeHolder: string;
   label: string;
   ref: React.Ref<HTMLInputElement>;
+  onKeyDown:React.KeyboardEventHandler<HTMLInputElement>
 }
 
 // Defines the structure for a Tooltip
