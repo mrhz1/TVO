@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextInput from "./components/TextInput";
 import SelectInput from "./components/SelectInput";
 import i18n from "./i18n";
@@ -46,16 +46,47 @@ function App() {
     },
   ];
 
-  // Handler for changing openweathermap API language and website language
-  const handleChangeLanguage = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLanguage(e.target.value);
-    i18n.changeLanguage(e.target.value);
-  };
-
-  // Handler for changing openWeatherMap API unit (°F, °C)
-  const handleChangeUnit = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUnit(e.target.value);
-  };
+  /**
+   * Checking the access of browser geolocation
+   * Fetch weather information using location coordinates, unit, and language
+   * If don't have access to location, checking the localStorage to get last searched city name
+   */
+  useEffect(() => {
+    setError(null);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const getWeatherDataWithCoordinates = async () => {
+            const response = await fetch(
+              `http://localhost:7000/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
+            );
+            const data = await response.json();
+            setWeather(data);
+            localStorage.setItem("cityName", data.name);
+            if (inputRef.current) {
+              inputRef.current.value = data.name;
+            }
+            setLoading(false);
+          };
+          getWeatherDataWithCoordinates();
+        },
+        (err) => {
+          if (err.PERMISSION_DENIED) {
+            if (inputRef.current) {
+              inputRef.current.value = localStorage.getItem("cityName") || "";
+              getWeatherData();
+            }
+          }
+          setError(err.message);
+          setLoading(false);
+        }
+      );
+    } else {
+      setError(t('geolocation_error'));
+      setLoading(false);
+    }
+  }, [language, unit]);
 
   // Fetch weather information by city name, unit, and language
   const getWeatherData = async () => {
@@ -70,9 +101,20 @@ function App() {
       setWeather(data);
       localStorage.setItem("cityName", data.name);
     } else {
-      setError("Wrong city name was entered");
+      setError("wrong_city");
     }
     setLoading(false);
+  };
+
+  // Handler for changing openweathermap API language and website language
+  const handleChangeLanguage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLanguage(e.target.value);
+    i18n.changeLanguage(e.target.value);
+  };
+
+  // Handler for changing openWeatherMap API unit (°F, °C)
+  const handleChangeUnit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUnit(e.target.value);
   };
 
   /**
@@ -83,7 +125,7 @@ function App() {
       label: (
         <div>
           <PressureIcon size={28} fill="#ffffff" tooltip="pressure-tooltip" />
-          <CustomTooltip id="pressure-tooltip" text="Pressure" />
+          <CustomTooltip id="pressure-tooltip" text="pressure" />
         </div>
       ),
       value: weather?.main?.pressure ?? "",
@@ -93,7 +135,7 @@ function App() {
       label: (
         <div>
           <HumidityIcon size={28} fill="#ffffff" tooltip="humidity-tooltip" />
-          <CustomTooltip id="humidity-tooltip" text="Humidity" />
+          <CustomTooltip id="humidity-tooltip" text="humidity" />
         </div>
       ),
       value: weather?.main?.humidity ?? "",
@@ -103,7 +145,7 @@ function App() {
       label: (
         <div>
           <SunriseIcon size={28} fill="#ffffff" tooltip="sunrise-tooltip" />
-          <CustomTooltip id="sunrise-tooltip" text="Sunrise" />
+          <CustomTooltip id="sunrise-tooltip" text="sunrise" />
         </div>
       ),
       value:
@@ -122,7 +164,7 @@ function App() {
       label: (
         <div>
           <SunsetIcon size={28} fill="#ffffff" tooltip="sunset-tooltip" />
-          <CustomTooltip id="sunset-tooltip" text="Sunset" />
+          <CustomTooltip id="sunset-tooltip" text="sunset" />
         </div>
       ),
       value:
@@ -185,12 +227,12 @@ function App() {
   ];
 
   return (
-    <div>
+    <div className="p-5">
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-6">
         <form>
           <div className="grid gap-5 mb-6">
             <TextInput
-              label="City Name"
+              label="city_name"
               id="city_name"
               ref={inputRef}
               placeHolder="Enter City Name"
@@ -198,7 +240,7 @@ function App() {
             <SelectInput
               ref={selectRef}
               id="language"
-              label="Language"
+              label="language"
               value={language}
               items={languages}
               placeHolder="Select Language"
@@ -210,7 +252,7 @@ function App() {
               onChange={handleChangeUnit}
             />
             <CustomButton
-              text="Submit"
+              text="search"
               ref={buttonRef}
               label="Submit Form"
               onClick={getWeatherData}
@@ -240,7 +282,7 @@ function App() {
                 </p>
               </div>
               <div className="flex flex-col gap-4 text-white">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
                   <p className="text-6xl">
                     {weather?.main?.temp.toFixed(0)}°
                     {weather?.unit === "metric" ? "C" : "F"}

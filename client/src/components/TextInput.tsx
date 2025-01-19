@@ -1,5 +1,6 @@
 import React from "react";
 import { TextInputPropsType } from "../Types";
+import { t } from "i18next";
 
 const TextInput = React.forwardRef<HTMLInputElement, TextInputPropsType>(
   ({ id, placeHolder, label }, ref) => {
@@ -9,7 +10,7 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputPropsType>(
           htmlFor={id}
           className="block mb-2 text-sm font-medium text-gray-900"
         >
-          {label}
+          {t(label)}
         </label>
         <input
           ref={ref}

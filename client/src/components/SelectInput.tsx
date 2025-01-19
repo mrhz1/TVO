@@ -1,5 +1,6 @@
 import React from "react";
 import { SelectPropsType } from "../Types";
+import { t } from "i18next";
 
 const SelectInput = React.forwardRef<HTMLSelectElement, SelectPropsType>(
   ({ id, placeHolder, label, value, items, onChange }, ref) => {
@@ -9,7 +10,7 @@ const SelectInput = React.forwardRef<HTMLSelectElement, SelectPropsType>(
           htmlFor={id}
           className="block mb-2 text-sm font-medium text-gray-900"
         >
-          {label}
+          {t(label)}
         </label>
         <select
           onChange={onChange}
