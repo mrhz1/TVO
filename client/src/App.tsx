@@ -59,7 +59,7 @@ function App() {
           const { latitude, longitude } = position.coords;
           const getWeatherDataWithCoordinates = async () => {
             const response = await fetch(
-              `http://localhost:7000/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
+              `http://localhost:10000/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
             );
             const data = await response.json();
             setWeather(data);
@@ -94,7 +94,7 @@ function App() {
     setLoading(true);
     const name = inputRef?.current?.value ?? "";
     const response = await fetch(
-      `http://localhost:7000/api/weather/name?q=${name}&unit=${unit}&lang=${language}`
+      `http://localhost:10000/api/weather/name?q=${name}&unit=${unit}&lang=${language}`
     );
     if (response.status === 200) {
       const data = await response.json();
