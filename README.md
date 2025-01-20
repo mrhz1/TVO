@@ -42,20 +42,67 @@ http://localhost:7000/
 
 - **Root/**
     - *client/*
-        - assets/
+        - public/
             - other files
-        - images/
-            - Logo
+        - src/
+            - assets/
+                - other files        
+        - package.json
+        - postcss.config.js
+        - tailwind.config.js
+        - tsconfig.app.json
+        - tsconfig.json
+        - tsconfig.node.json
+        - vite.config.ts
         - index.html (Main file)
     - server/
         - .env (Environment variables)
+        - constants.ts
         - index.ts (Main script)
         - server.ts (Server class)
         - The rest of necessary files
     - README.md (this file)
 
-## Usage
-- TBD
+## Test the docker image locally
+
+### Build image
+
+
+```bash
+docker build -t weather-app .
+```
+
+### Run image
+
+First, run the following command:
+
+```bash
+docker run --env-file .env -p 7000:7000 -d weather-app
+```
+
+Then, open the browser at `http://localhost:7000/`
+
+### View logs
+
+```bash
+# Get container ID
+docker ps
+
+# Print logs
+docker logs <container id>
+```
+
+### Stop image
+
+Once you are done with testing, you need to stop the container
+
+```bash
+# Get container ID
+docker ps
+
+# Stop containter
+docker stop <container id>
+```
 
 ## Additional Resources
 
