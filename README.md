@@ -19,7 +19,7 @@ touch .env
 
 ```
 PORT=7000
-NODE_ENV=development
+API_KEY={Add Your API Key Here}
 ```
 
 4. Install the dependencies
@@ -43,21 +43,13 @@ http://localhost:7000/
 - **Root/**
     - *client/*
         - public/
-            - other files
+            - favicon.ico
         - src/
-            - assets/
-                - other files        
-        - package.json
-        - postcss.config.js
-        - tailwind.config.js
-        - tsconfig.app.json
-        - tsconfig.json
-        - tsconfig.node.json
-        - vite.config.ts
-        - index.html (Main file)
+            - other files                
+        - main.tsx (Entry file)
+        - The rest of necessary files
     - server/
-        - .env (Environment variables)
-        - constants.ts
+        - .env (Environment variables)        
         - index.ts (Main script)
         - server.ts (Server class)
         - The rest of necessary files
@@ -103,7 +95,3 @@ docker ps
 # Stop containter
 docker stop <container id>
 ```
-
-## Additional Resources
-
-[Google](https://www.google.ca/)

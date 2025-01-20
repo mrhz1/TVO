@@ -10,7 +10,7 @@ import { baseUrl, serverError } from "./constants.ts";
 
 // Resolve the directory name for static files
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const clientFolder = "../client";
+const clientFolder = "../client/dist";
 const appPath = join(__dirname, clientFolder);
 
 export default class Server {
@@ -104,6 +104,16 @@ export default class Server {
 
     // Serve static files from the client folder
     this.app.use("/", express.static(appPath));
+    this.app.get("/", (_req: Request, res: Response) => {
+      res.sendFile(
+        join(__dirname, `${clientFolder}/index.html`),
+        function (err) {
+          if (err) {
+            res.status(500).send(err);
+          }
+        }
+      );
+    });
   }
 
   /**

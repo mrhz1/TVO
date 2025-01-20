@@ -3,6 +3,7 @@ import TextInput from "./components/TextInput";
 import SelectInput from "./components/SelectInput";
 import i18n from "./i18n";
 import RadioButton from "./components/RadioButton";
+import 'flowbite';
 import {
   RadioButtonOptionsType,
   WeatherAPIType,
@@ -317,99 +318,99 @@ function App() {
           </div>
         </form>
         <div className="col-span-2">
-          {error ? (
+          <div
+            className={`${
+              error ? "" : "hidden"
+            }p-4 mb-4 font-bold text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400`}
+            role="alert"
+            aria-live="assertive"
+          >
+            {error}
+          </div>
+          <div>
+            <p className={`${loading ? "" : "hidden"}`}>{t("loading")}</p>
             <div
-              className="p-4 mb-4 font-bold text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-              aria-live="assertive"
+              className={`${
+                error || loading ? "hidden" : ""
+              } bg-[#2B2B2B] rounded-xl p-8 grid grid-cols-1 md:grid-cols-3 justify-between`}
             >
-              {error}
-            </div>
-          ) : (
-            <div>
-              {loading ? (
-                t("loading")
-              ) : (
-                <div className="bg-[#2B2B2B] rounded-xl p-8 grid grid-cols-1 md:grid-cols-3 justify-between">
-                  <div className="col-span-2">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:justify-between text-white mb-2">
-                      <span>
-                        {weather?.name}, {weather?.sys?.country}
-                      </span>
+              <div className="col-span-2">
+                <div className="flex flex-col gap-4 lg:flex-row lg:justify-between text-white mb-2">
+                  <span>
+                    {weather?.name}, {weather?.sys?.country}
+                  </span>
+                  <p>
+                    {new Date((weather?.dt ?? 0) * 1000).toLocaleTimeString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        hour12: false,
+                      }
+                    )}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 text-white">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+                    <p className="text-6xl">
+                      {weather?.main?.temp.toFixed(0)}°
+                      {weather?.unit === "metric" ? "C" : "F"}
+                    </p>
+                    <div className="grid gap-1">
                       <p>
-                        {new Date((weather?.dt ?? 0) * 1000).toLocaleTimeString(
-                          "en-US",
-                          {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            second: "2-digit",
-                            hour12: false,
-                          }
-                        )}
+                        Min / Max:
+                        <span className="mx-1">
+                          {weather?.main.temp_min.toFixed(0)}
+                        </span>
+                        \
+                        <span className="mx-1">
+                          {weather?.main?.temp_max.toFixed(0)}
+                        </span>
+                        °{weather?.unit === "metric" ? "C" : "F"}
+                      </p>
+                      <p>
+                        {t("feels_like")}:
+                        <span>
+                          {weather?.main?.feels_like.toFixed(0) ?? ""}°
+                          {weather?.unit === "metric" ? "C" : "F"}
+                        </span>
                       </p>
                     </div>
-                    <div className="flex flex-col gap-4 text-white">
-                      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
-                        <p className="text-6xl">
-                          {weather?.main?.temp.toFixed(0)}°
-                          {weather?.unit === "metric" ? "C" : "F"}
-                        </p>
-                        <div className="grid gap-1">
-                          <p>
-                            Min / Max:
-                            <span className="mx-1">
-                              {weather?.main.temp_min.toFixed(0)}
-                            </span>
-                            \
-                            <span className="mx-1">
-                              {weather?.main?.temp_max.toFixed(0)}
-                            </span>
-                            °{weather?.unit === "metric" ? "C" : "F"}
-                          </p>
-                          <p>
-                            {t("feels_like")}:
-                            <span>
-                              {weather?.main?.feels_like.toFixed(0) ?? ""}°
-                              {weather?.unit === "metric" ? "C" : "F"}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4 md:gap-x-4 lg:gap-x-4">
-                        {weatherInformation.map((item, index) => (
-                          <div
-                            className={`${
-                              !item.value ? "hidden" : "flex"
-                            } items-center font-semibold`}
-                            key={index}
-                          >
-                            {item.label}:{item.value}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
                   </div>
-                  <div className="flex justify-between md:justify-end">
-                    {weather?.weather.map((item, index) => (
-                      <div key={index} className="text-center">
-                        <img
-                          className="w-32"
-                          src={`https://openweathermap.org/img/wn/${item.icon}@4x.png`}
-                          alt={item.description}
-                          role="img"
-                          aria-label={item.description}
-                        />
-                        <p className="text-white">{item.description}</p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4 md:gap-x-4 lg:gap-x-4">
+                    {weatherInformation.map((item, index) => (
+                      <div
+                        className={`${
+                          !item.value ? "hidden" : "flex"
+                        } items-center font-semibold`}
+                        key={index}
+                      >
+                        {item.label}:{item.value}
                       </div>
                     ))}
                   </div>
                 </div>
-              )}
+              </div>
+              <div className="flex justify-between md:justify-end">
+                {weather?.weather.map((item, index) => (
+                  <div key={index} className="text-center">
+                    <img
+                      className="w-32"
+                      src={`https://openweathermap.org/img/wn/${item.icon}@4x.png`}
+                      alt={item.description}
+                      role="img"
+                      aria-label={item.description}
+                    />
+                    <p className="text-white">{item.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
