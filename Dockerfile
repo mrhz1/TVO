@@ -41,8 +41,7 @@ WORKDIR ${WORK_DIR}
 RUN addgroup --group nodejs --gid 1001
 RUN adduser myuser --gid 1001 --uid 1001
 COPY --from=builder ${WORK_DIR}dist ./client/dist
-COPY server ./server
-RUN cd server
+COPY server ./
 RUN yarn install --frozen-lockfile
 
 USER myuser
@@ -52,4 +51,4 @@ ENV NODE_ENV=production
 # Expose
 EXPOSE 7000
 
-CMD ["node", "server/index.ts"]
+CMD ["node", "./index.ts"]
