@@ -183,7 +183,7 @@ function App() {
         </div>
       ),
       value: weather?.main?.pressure ?? "",
-      unit: "",
+      unit: "hPa",
     },
     {
       label: (
@@ -236,32 +236,32 @@ function App() {
     {
       label: t("sea_level"),
       value: weather?.main?.sea_level ?? "",
-      unit: "",
+      unit: "hPa",
     },
     {
       label: t("ground_level"),
       value: weather?.main?.grnd_level ?? "",
-      unit: "",
+      unit: "hPa",
     },
     {
       label: t("visibility"),
       value: weather?.visibility ?? "",
-      unit: "",
+      unit: "m",
     },
     {
       label: t("wind_speed"),
       value: weather?.wind.speed ?? "",
-      unit: "",
+      unit: weather?.unit === "metric" ? "m/s":"m/h",
     },
     {
       label: t("wind_degree"),
       value: weather?.wind.deg ?? "",
-      unit: "",
+      unit: "deg",
     },
     {
       label: t("wind_gust"),
       value: weather?.wind.gust ?? "",
-      unit: "",
+      unit: weather?.unit === "metric" ? "m/s":"m/h",
     },
     {
       label: t("clouds"),
@@ -389,7 +389,7 @@ function App() {
                         } items-center font-semibold`}
                         key={index}
                       >
-                        {item.label}:{item.value}
+                        {item.label}:{item.value + ' ' + item.unit}
                       </div>
                     ))}
                   </div>
