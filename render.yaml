@@ -3,7 +3,7 @@ services:
     name: weather-app
     env: docker
     buildCommand: docker build -t weather-app .
-    startCommand: docker run -d -p 7000:7000 weather-app
+    startCommand: docker run --env-file .env -p 7000:7000 -d weather-app
     plan: free
     branch: main
     envVars:

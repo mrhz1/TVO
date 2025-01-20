@@ -42,6 +42,7 @@ RUN addgroup --group nodejs --gid 1001
 RUN adduser myuser --gid 1001 --uid 1001
 COPY --from=builder ${WORK_DIR}dist ./client/dist
 COPY server ./server
+RUN cd server
 RUN yarn install --frozen-lockfile
 
 USER myuser
