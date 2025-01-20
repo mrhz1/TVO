@@ -18,7 +18,7 @@ touch .env
 2. Open the `.env` file and add the following environment variables:
 
 ```
-PORT=7000
+PORT=10000
 API_KEY={Add Your API Key Here}
 ```
 
@@ -34,7 +34,7 @@ yarn serve
 
 6. Oen the browser and navigate to:
 ```
-http://localhost:7000/
+http://localhost:10000/
 ```
 
 
@@ -69,10 +69,10 @@ docker build -t weather-app .
 First, run the following command:
 
 ```bash
-docker run --env-file .env -p 7000:7000 -d weather-app
+docker run --env-file .env -p 10000:10000 -d weather-app
 ```
 
-Then, open the browser at `http://localhost:7000/`
+Then, open the browser at `http://localhost:10000/`
 
 ### View logs
 

@@ -17,7 +17,6 @@ import SunriseIcon from "./Icons/SunriseIcon";
 import SunsetIcon from "./Icons/SunsetIcon";
 import CustomTooltip from "./components/CustomTooltip";
 function App() {
-  const API_Url = import.meta.env.VITE_API_URL;
   const [language, setLanguage] = useState<string>("en");
   const [unit, setUnit] = useState<string>("metric");
   const languages = [
@@ -59,7 +58,7 @@ function App() {
           const { latitude, longitude } = position.coords;
           const getWeatherDataWithCoordinates = async () => {
             const response = await fetch(
-              `${API_Url}/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
+              `/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
             );
             const data = await response.json();
             setWeather(data);
@@ -94,7 +93,7 @@ function App() {
     setLoading(true);
     const name = inputRef?.current?.value ?? "";
     const response = await fetch(
-      `${API_Url}/api/weather/name?q=${name}&unit=${unit}&lang=${language}`
+      `/api/weather/name?q=${name}&unit=${unit}&lang=${language}`
     );
     if (response.status === 200) {
       const data = await response.json();
