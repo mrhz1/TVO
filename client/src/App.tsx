@@ -59,7 +59,7 @@ function App() {
           const { latitude, longitude } = position.coords;
           const getWeatherDataWithCoordinates = async () => {
             const response = await fetch(
-              `${API_Url}/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
+              `https://weather-app-0jnh.onrender.com/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
             );
             const data = await response.json();
             setWeather(data);
@@ -94,7 +94,7 @@ function App() {
     setLoading(true);
     const name = inputRef?.current?.value ?? "";
     const response = await fetch(
-      `${API_Url}/api/weather/name?q=${name}&unit=${unit}&lang=${language}`
+      `https://weather-app-0jnh.onrender.com/api/weather/name?q=${name}&unit=${unit}&lang=${language}`
     );
     if (response.status === 200) {
       const data = await response.json();
