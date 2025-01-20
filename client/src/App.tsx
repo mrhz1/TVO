@@ -3,7 +3,7 @@ import TextInput from "./components/TextInput";
 import SelectInput from "./components/SelectInput";
 import i18n from "./i18n";
 import RadioButton from "./components/RadioButton";
-import 'flowbite';
+import "flowbite";
 import {
   RadioButtonOptionsType,
   WeatherAPIType,
@@ -58,8 +58,6 @@ function App() {
         (position) => {
           const { latitude, longitude } = position.coords;
           const getWeatherDataWithCoordinates = async () => {
-            console.log(API_Url);
-            
             const response = await fetch(
               `${API_Url}/api/weather/coord?lat=${latitude}&lon=${longitude}&unit=${unit}&lang=${language}`
             );
@@ -253,7 +251,7 @@ function App() {
     {
       label: t("wind_speed"),
       value: weather?.wind.speed ?? "",
-      unit: weather?.unit === "metric" ? "m/s":"m/h",
+      unit: weather?.unit === "metric" ? "m/s" : "m/h",
     },
     {
       label: t("wind_degree"),
@@ -263,7 +261,7 @@ function App() {
     {
       label: t("wind_gust"),
       value: weather?.wind.gust ?? "",
-      unit: weather?.unit === "metric" ? "m/s":"m/h",
+      unit: weather?.unit === "metric" ? "m/s" : "m/h",
     },
     {
       label: t("clouds"),
@@ -391,7 +389,7 @@ function App() {
                         } items-center font-semibold`}
                         key={index}
                       >
-                        {item.label}:{item.value + ' ' + item.unit}
+                        {item.label}:{item.value + " " + item.unit}
                       </div>
                     ))}
                   </div>
